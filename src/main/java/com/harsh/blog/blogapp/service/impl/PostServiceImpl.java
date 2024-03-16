@@ -28,6 +28,7 @@ public class PostServiceImpl implements PostService {
 //        Convert Entity to DTO
         PostDTO postReponse = new PostDTO();
         postReponse.setId(newPost.getId());
+        postReponse.setTitle(newPost.getTitle());
         postReponse.setDescription(newPost.getDescription());
         postReponse.setContent(newPost.getContent());
 
