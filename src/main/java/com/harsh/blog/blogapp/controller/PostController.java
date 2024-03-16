@@ -1,5 +1,6 @@
 package com.harsh.blog.blogapp.controller;
 
+import com.harsh.blog.blogapp.entity.Post;
 import com.harsh.blog.blogapp.payload.PostDTO;
 import com.harsh.blog.blogapp.service.PostService;
 import org.springframework.http.HttpStatus;
@@ -29,9 +30,22 @@ public class PostController {
         return postService.getAllPosts();
     }
 
-//    get post by id
+    //    get post by id
     @GetMapping("/{id}")
-    public ResponseEntity<PostDTO> getPostById(@PathVariable(name="id") long id){
+    public ResponseEntity<PostDTO> getPostById(@PathVariable(name = "id") long id) {
         return new ResponseEntity<>(postService.getPostById(id), HttpStatus.OK);
+    }
+
+    //Update post
+    @PutMapping("/{id}")
+    public ResponseEntity<PostDTO> updatePost(@RequestBody PostDTO postDTO,
+                                              @PathVariable(name = "id") long id) {
+        return new ResponseEntity<>(postService.updatePost(postDTO, id), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletePost(@PathVariable(name = "id") long id) {
+        postService.deletePost(id);
+        return new ResponseEntity<>("Post Entity deleted successfully", HttpStatus.OK);
     }
 }
