@@ -1,6 +1,7 @@
 package com.harsh.blog.blogapp.service.impl;
 
 import com.harsh.blog.blogapp.entity.Post;
+import com.harsh.blog.blogapp.exception.ResourceNotFoundException;
 import com.harsh.blog.blogapp.payload.PostDTO;
 import com.harsh.blog.blogapp.repository.PostRepository;
 import com.harsh.blog.blogapp.service.PostService;
@@ -26,14 +27,21 @@ public class PostServiceImpl implements PostService {
         Post newPost = postRepository.save(post);
 
 //        Convert Entity to DTO
-        PostDTO postResponse = mapDTO(newPost);
+        PostDTO postResponse = mapToDTO(newPost);
         return postResponse;
     }
 
     @Override
     public List<PostDTO> getAllPosts() {
         List<Post> posts = postRepository.findAll();
-        return posts.stream().map(post -> mapDTO(post)).collect(Collectors.toList());
+        return posts.stream().map(post -> mapToDTO(post)).collect(Collectors.toList());
+    }
+
+    @Override
+    public PostDTO getPostById(long id) {
+        Post post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
+        PostDTO postDTO = mapToDTO(post);
+        return postDTO;
     }
 
     private Post mapToEntity(PostDTO postDTO) {
@@ -47,7 +55,7 @@ public class PostServiceImpl implements PostService {
     }
 
     //    convert Entity to DTO
-    private PostDTO mapDTO(Post post) {
+    private PostDTO mapToDTO(Post post) {
         PostDTO postDTO = new PostDTO();
 
         postDTO.setTitle(post.getTitle());
